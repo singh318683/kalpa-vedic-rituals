@@ -297,3 +297,12 @@ body{height:100vh;height:100svh;height:var(--app-h,100svh)}
 .pane .meta{padding:7px 10px;margin-bottom:6px;font-size:13px;line-height:1.4}
 .pane .meta b{display:inline;margin-right:6px}
 .pane .hint{margin-top:4px;font-size:12.5px}
+
+/* ===== v4: explicit lab canvas height (Safari doesn't resolve % heights in flex) ===== */
+.lab-wrap{flex:0 0 auto}
+.lab-canvas{flex:0 0 auto;width:100%;height:calc(var(--app-h,100svh) * .36);min-height:0;max-height:92vw}
+.lab-canvas svg{width:100%;height:100%;max-width:none;aspect-ratio:auto}
+@media(min-width:760px){
+  .lab-canvas{height:calc(var(--app-h,100svh) * .62);max-height:none}
+}
+@media(max-height:620px){ .lab-canvas{height:calc(var(--app-h,100svh) * .30)} .lab .page-title{font-size:19px} }
