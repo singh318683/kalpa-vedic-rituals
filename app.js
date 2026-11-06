@@ -69,6 +69,7 @@
     about: { en: "About", hi: "परिचय" },
     aboutBody: { en: "Kalpa: Vedic Rituals is an early prototype. Content is for learning and preparation and will be reviewed by a qualified pandit before release.", hi: "कल्प: वैदिक संस्कार एक प्रारंभिक प्रोटोटाइप है। सामग्री सीखने और तैयारी के लिए है और जारी होने से पहले योग्य पंडित द्वारा समीक्षित की जाएगी।" },
     notFound: { en: "Page not found", hi: "पृष्ठ नहीं मिला" },
+    reviewShort: { en: "Prototype guide, not yet reviewed by a pandit. Follow your family tradition where it differs.", hi: "प्रोटोटाइप — अभी पंडित द्वारा समीक्षित नहीं। जहाँ अंतर हो, पारिवारिक परंपरा का पालन करें।" },
     tabAbout: { en: "About", hi: "परिचय" }, tabSamagri: { en: "Samagri", hi: "सामग्री" }, tabSteps: { en: "Steps", hi: "चरण" },
     allRites: { en: "All rites", hi: "सभी संस्कार" }, allRitesBody: { en: "3 ready · 13 coming", hi: "3 तैयार · 13 आने वाले" },
     sandhyaBody: { en: "15-minute morning practice", hi: "15 मिनट की प्रातः उपासना" },
@@ -105,10 +106,10 @@
       </div>
       <h2 class="sec">${t("explore")}</h2>
       <div class="tiles two grow">
-        <a class="tile big" href="#/lab"><i>📐</i><b>${t("labCardTitle")}</b><span>Śulba Sūtras</span></a>
-        <a class="tile big" href="#/learn"><i>📜</i><b>${t("learnCardTitle")}</b><span>Vedāṅga</span></a>
-        <a class="tile big" href="#/rite/sandhya"><i>🌅</i><b>${t("daily")}</b><span>${t("sandhyaBody")}</span></a>
-        <a class="tile big" href="#/samskaras"><i>🪔</i><b>${t("allRites")}</b><span>${t("allRitesBody")}</span></a>
+        <a class="tile big" href="#/lab"><i>📐</i><span class="tx"><b>${t("labCardTitle")}</b><span>Śulba Sūtras</span></span></a>
+        <a class="tile big" href="#/learn"><i>📜</i><span class="tx"><b>${t("learnCardTitle")}</b><span>Vedāṅga</span></span></a>
+        <a class="tile big" href="#/rite/sandhya"><i>🌅</i><span class="tx"><b>${t("daily")}</b><span>${t("sandhyaBody")}</span></span></a>
+        <a class="tile big" href="#/samskaras"><i>🪔</i><span class="tx"><b>${t("allRites")}</b><span>${t("allRitesBody")}</span></span></a>
       </div>
     </div>`;
   }
@@ -147,7 +148,7 @@
           <div class="meta"><b>${t("duration")}</b>${L(r.duration)}</div>
           <div class="meta"><b>${t("who")}</b>${L(r.roles)}</div>
           ${r.group === "samskara" ? `<p class="hint">📅 ${t("linkTithi")}</p>` : ""}
-          <div class="notice">${t("reviewNote")}</div>
+          <div class="notice">${t("reviewShort")}</div>
         </div>
         <div class="pane" data-pane="samagri" hidden>
           <div class="checks">${r.samagri.map((s, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${checked.includes(i) ? "checked" : ""}><span>${L(s)}</span></label>`).join("")}</div>
@@ -416,6 +417,12 @@
   }
 
   function setLang(l) { lang = l; store.set("lang", l); applyStatic(); render(); }
+
+  // size the app to the area the browser actually shows (iOS Safari toolbars)
+  const fitHeight = () => document.documentElement.style.setProperty("--app-h", window.innerHeight + "px");
+  fitHeight();
+  window.addEventListener("resize", fitHeight);
+  if (window.visualViewport) window.visualViewport.addEventListener("resize", fitHeight);
 
   document.getElementById("langBtn").addEventListener("click", () => setLang(lang === "en" ? "hi" : "en"));
   window.addEventListener("hashchange", render);
