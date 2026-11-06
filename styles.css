@@ -306,3 +306,26 @@ body{height:100vh;height:100svh;height:var(--app-h,100svh)}
   .lab-canvas{height:calc(var(--app-h,100svh) * .62);max-height:none}
 }
 @media(max-height:620px){ .lab-canvas{height:calc(var(--app-h,100svh) * .30)} .lab .page-title{font-size:19px} }
+
+/* ===== v5 ===== */
+/* iOS 26 Safari draws its toolbar over the page bottom: lift the tab bar above it */
+.ios-float-bar .tabbar{padding-bottom:calc(env(safe-area-inset-bottom) + 58px)}
+.ios-float-bar body.guided-mode .view{padding-bottom:calc(env(safe-area-inset-bottom) + 66px)}
+
+/* compact rite grid */
+.rite-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.rt{position:relative;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:8px 9px 8px;min-width:0;display:flex;flex-direction:column}
+.rt em{position:absolute;top:6px;right:8px;font-style:normal;font-size:10.5px;font-weight:700;color:var(--gold)}
+.rt b{font-family:var(--serif);font-weight:600;font-size:13.5px;line-height:1.2;padding-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rt span{font-size:11px;color:var(--muted);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.rt.daily{grid-column:span 3;background:var(--soft);border-color:#EBCDB4}
+.rt.daily em{color:var(--saffron)}
+@media(min-width:620px){.rite-grid{grid-template-columns:repeat(4,1fr);gap:10px}.rt.daily{grid-column:span 4}.rt b{font-size:15px}.rt{padding:12px}}
+.meta.warn{background:#FFF6E5;border-color:#F0D9A8}
+.meta.warn b{display:inline;font-size:13px;color:var(--gold)}
+@media(max-height:620px){ .rite-grid{gap:5px;margin-top:6px} .rt{padding:6px 8px} }
+.ios-float-bar .lab-canvas{height:calc(var(--app-h,100svh) * .31)}
+.rt b{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;font-size:13px;padding-right:14px}
+@media(max-width:380px){.rt b{font-size:12.5px}}
+.ios-float-bar .rite-grid{gap:5px;margin-top:6px}
+.ios-float-bar .rt{padding:6px 8px}

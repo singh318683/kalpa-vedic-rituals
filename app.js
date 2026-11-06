@@ -70,8 +70,12 @@
     aboutBody: { en: "Kalpa: Vedic Rituals is an early prototype. Content is for learning and preparation and will be reviewed by a qualified pandit before release.", hi: "कल्प: वैदिक संस्कार एक प्रारंभिक प्रोटोटाइप है। सामग्री सीखने और तैयारी के लिए है और जारी होने से पहले योग्य पंडित द्वारा समीक्षित की जाएगी।" },
     notFound: { en: "Page not found", hi: "पृष्ठ नहीं मिला" },
     reviewShort: { en: "Prototype guide, not yet reviewed by a pandit. Follow your family tradition where it differs.", hi: "प्रोटोटाइप — अभी पंडित द्वारा समीक्षित नहीं। जहाँ अंतर हो, पारिवारिक परंपरा का पालन करें।" },
+    lifeSeq: { en: "The sixteen saṁskāras, in the order of a life.", hi: "सोलह संस्कार, जीवन के क्रम में।" },
+    dailyShort: { en: "Daily", hi: "दैनिक" },
+    peaceTitle: { en: "ॐ शान्तिः", hi: "ॐ शान्तिः" },
+    peaceBody: { en: "May the departed rest in peace, and may your family find strength.", hi: "दिवंगत आत्मा को शांति मिले, और आपके परिवार को शक्ति।" },
     tabAbout: { en: "About", hi: "परिचय" }, tabSamagri: { en: "Samagri", hi: "सामग्री" }, tabSteps: { en: "Steps", hi: "चरण" },
-    allRites: { en: "All rites", hi: "सभी संस्कार" }, allRitesBody: { en: "3 ready · 13 coming", hi: "3 तैयार · 13 आने वाले" },
+    allRites: { en: "All rites", hi: "सभी संस्कार" }, allRitesBody: { en: "All 16 saṁskāras", hi: "सभी 16 संस्कार" },
     sandhyaBody: { en: "15-minute morning practice", hi: "15 मिनट की प्रातः उपासना" },
     linkTithi: { en: "Need an auspicious date? Check the tithi in the Tithi app.", hi: "शुभ तिथि चाहिए? ‘तिथि’ ऐप में देखें।" }
   };
@@ -93,7 +97,7 @@
 
   // ---------- views ----------
   function viewHome() {
-    const samskaras = D.rites.filter((r) => r.group === "samskara");
+    const samskaras = ["namakarana", "annaprashana", "mundan"].map(rite);
     return `<div class="view">
       <section class="hero">${mandala}
         <div class="kicker" style="color:#F1B477">कल्प · Vedāṅga</div>
@@ -115,15 +119,16 @@
   }
 
   function viewSamskaras() {
+    const sams = D.rites.filter((r) => r.group === "samskara");
+    const nitya = D.rites.filter((r) => r.group === "nitya");
     return `<div class="view">
       <div class="kicker">Gṛhya Sūtras</div>
       <h1 class="page-title">${t("saṁskāras")}</h1>
-      <p class="lede sm">${t("samskaraLede")}</p>
-      <div class="tiles two" style="margin-top:14px">
-        ${D.rites.map((r) => `<a class="tile" href="#/rite/${r.id}"><span class="tag">${r.group === "nitya" ? t("daily") : t("free")}</span><b>${L(r.name)}</b><span>${L(r.tagline)}</span></a>`).join("")}
+      <p class="lede sm">${t("lifeSeq")}</p>
+      <div class="rite-grid">
+        ${sams.map((r, i) => `<a class="rt" href="#/rite/${r.id}"><em>${i + 1}</em><b>${L(r.name)}</b><span>${L(r.tagline)}</span></a>`).join("")}
+        ${nitya.map((r) => `<a class="rt daily" href="#/rite/${r.id}"><em>☀</em><b>${L(r.name)}</b><span>${t("dailyShort")} · ${L(r.tagline)}</span></a>`).join("")}
       </div>
-      <h2 class="sec">${t("comingSoon")}</h2>
-      <div class="chips">${D.upcoming.map((u) => `<span class="chip">${L(u)}</span>`).join("")}</div>
     </div>`;
   }
 
@@ -147,7 +152,8 @@
           <div class="meta"><b>${t("when")}</b>${L(r.when)}</div>
           <div class="meta"><b>${t("duration")}</b>${L(r.duration)}</div>
           <div class="meta"><b>${t("who")}</b>${L(r.roles)}</div>
-          ${r.group === "samskara" ? `<p class="hint">📅 ${t("linkTithi")}</p>` : ""}
+          ${r.note ? `<div class="meta warn"><b>⚕︎</b>${L(r.note)}</div>` : ""}
+          ${r.group === "samskara" && !r.sensitive ? `<p class="hint">📅 ${t("linkTithi")}</p>` : ""}
           <div class="notice">${t("reviewShort")}</div>
         </div>
         <div class="pane" data-pane="samagri" hidden>
@@ -183,7 +189,8 @@
     if (!r) return viewNotFound();
     const total = r.steps.length;
     if (n > total) {
-      return `<div class="view guided done"><div class="big">🪔</div><h1>${t("doneTitle")}</h1><p class="lede" style="margin:0 auto">${t("doneBody")}</p>
+      const soft = r.sensitive;
+      return `<div class="view guided done"><div class="big">${soft ? "🕊️" : "🪔"}</div><h1>${soft ? t("peaceTitle") : t("doneTitle")}</h1><p class="lede" style="margin:0 auto">${soft ? t("peaceBody") : t("doneBody")}</p>
         <div class="nav-row"><a class="btn ghost" href="#/rite/${id}">${t("backToRite")}</a><a class="btn" href="#/">${t("home")}</a></div></div>`;
     }
     const s = r.steps[n - 1];
@@ -419,6 +426,11 @@
   function setLang(l) { lang = l; store.set("lang", l); applyStatic(); render(); }
 
   // size the app to the area the browser actually shows (iOS Safari toolbars)
+  const ua = navigator.userAgent;
+  const iosSafari = /iP(hone|od|ad)/.test(ua) && /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|GSA|FBAN|FBAV|Instagram|WhatsApp/.test(ua);
+  const standalone = navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+  const safariVer = parseInt((ua.match(/Version\/(\d+)/) || [])[1] || "0", 10);
+  if (iosSafari && !standalone && safariVer >= 26) document.documentElement.classList.add("ios-float-bar");
   const fitHeight = () => document.documentElement.style.setProperty("--app-h", window.innerHeight + "px");
   fitHeight();
   window.addEventListener("resize", fitHeight);
