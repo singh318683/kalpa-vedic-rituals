@@ -1,0 +1,9 @@
+{
+  "name": "Kalpa: Vedic Rituals",
+  "short_name": "Kalpa",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FBF6EC",
+  "theme_color": "#7A1F1F",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}

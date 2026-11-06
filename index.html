@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kalpa: Vedic Rituals</title>
+<meta name="description" content="Step-by-step guides to Vedic household rites, daily practice and the altar geometry of the Śulba Sūtras.">
+<meta name="theme-color" content="#7A1F1F">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,500;0,600;1,500&family=Tiro+Devanagari+Sanskrit&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a href="#/" class="brand">
+      <img src="icon.svg" alt="" width="30" height="30">
+      <span>Kalpa<span class="brand-sub">: Vedic Rituals</span></span>
+    </a>
+    <button id="langBtn" class="lang-btn" aria-label="Switch language">हिंदी</button>
+  </header>
+
+  <main id="app" tabindex="-1"></main>
+
+  <nav class="tabbar" id="tabbar">
+    <a href="#/" data-tab="home"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/></svg><span data-i18n="tabHome"></span></a>
+    <a href="#/samskaras" data-tab="samskaras"><svg viewBox="0 0 24 24"><path d="M12 3c3 4 5 6.5 5 9.5a5 5 0 0 1-10 0C7 9.5 9 7 12 3z"/></svg><span data-i18n="tabRites"></span></a>
+    <a href="#/lab" data-tab="lab"><svg viewBox="0 0 24 24"><path d="M4 20L20 20L4 6z"/></svg><span data-i18n="tabLab"></span></a>
+    <a href="#/learn" data-tab="learn"><svg viewBox="0 0 24 24"><path d="M4 5h7a2 2 0 0 1 2 2v13a2 2 0 0 0-2-2H4zM20 5h-7a2 2 0 0 0-2 2v13a2 2 0 0 1 2-2h7z"/></svg><span data-i18n="tabLearn"></span></a>
+    <a href="#/settings" data-tab="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></svg><span data-i18n="tabSettings"></span></a>
+  </nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
