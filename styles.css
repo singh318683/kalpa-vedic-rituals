@@ -132,3 +132,126 @@ a.card:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(90,40,10,.08)
 body.guided-mode .tabbar{display:none}
 body.guided-mode{padding-bottom:0}
 footer.small{margin-top:40px;text-align:center;font-size:12.5px;color:var(--muted)}
+
+/* ================= single-screen app shell ================= */
+html,body{height:100%}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;padding-bottom:0}
+.topbar{position:static;flex:0 0 auto;padding:10px 16px}
+main{flex:1 1 auto;min-height:0;width:100%;max-width:none;overflow-y:auto;padding:0}
+.tabbar{position:static;flex:0 0 auto}
+.view{max-width:860px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:14px 16px 14px}
+.page-title{font-size:25px;margin-bottom:4px}
+.page-title small{font-family:var(--sans);font-size:14px;font-weight:500;color:var(--muted);margin-left:6px}
+.kicker{margin-bottom:4px;font-size:11px}
+.lede.sm{font-size:14px;line-height:1.45}
+.sec{font-size:17px;margin:14px 0 8px}
+.hero{padding:18px 18px;border-radius:18px;flex:0 0 auto}
+.hero h1{font-size:23px;max-width:280px}
+.hero .mandala{width:170px;right:-40px;top:-30px}
+.btn.sm{padding:9px 14px;font-size:14px;margin-top:12px;border-radius:12px}
+.hero .btn{margin-top:12px}
+
+/* tiles */
+.tiles{display:grid;gap:10px}
+.tiles.three{grid-template-columns:repeat(3,1fr)}
+.tiles.two{grid-template-columns:1fr 1fr}
+.tiles.grow{flex:1 1 auto;grid-auto-rows:1fr;min-height:0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+a.tile:active{transform:scale(.98)}
+.tile b{font-family:var(--serif);font-size:15.5px;line-height:1.2;font-weight:600;color:var(--ink)}
+.tile span{font-size:12.5px;color:var(--muted);line-height:1.3}
+.tile span.go{color:var(--saffron);font-weight:600;margin-top:auto}
+.tile .tag{align-self:flex-start;margin-bottom:6px;font-size:10px;padding:2px 8px;color:var(--maroon)}
+.tile.big{justify-content:flex-end}
+.tile.big i{font-style:normal;font-size:26px;margin-bottom:auto}
+.tile.big b{font-size:16.5px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12.5px;background:var(--paper);color:var(--muted);border-radius:16px;padding:5px 10px}
+
+/* segmented control + panes */
+.seg{display:flex;background:var(--paper);border-radius:12px;padding:4px;gap:4px;margin:10px 0}
+.seg button{flex:1;padding:9px 6px;border-radius:9px;font-size:14px;font-weight:600;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--maroon);box-shadow:0 1px 3px rgba(60,30,10,.12)}
+.seg em{font-style:normal;font-size:11.5px;background:var(--soft);color:var(--maroon);border-radius:10px;padding:1px 6px;margin-left:4px}
+.pane-wrap{flex:1 1 auto;min-height:0;overflow-y:auto;margin-bottom:12px}
+.pane .about{font-size:15px;margin-bottom:10px}
+.pane .meta{display:block;margin-bottom:8px;font-size:13.5px;padding:9px 12px}
+.pane .meta b{font-size:10.5px}
+.hint{font-size:13px;color:var(--muted);margin-top:8px}
+.notice{font-size:12px;padding:9px 12px;margin-top:10px}
+.checks{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:2px 12px}
+.check{padding:8px 2px;font-size:14px;gap:10px}
+.check input{flex-basis:20px;height:20px}
+.step-list{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:2px 12px}
+.step-list li{padding:8px 0;font-size:14.5px;align-items:center}
+.step-list .n{flex-basis:24px;height:24px;font-size:12px}
+
+/* guided */
+.view.guided{max-width:560px}
+.step-title{font-size:23px;margin-bottom:8px}
+.step-action{font-size:15.5px;line-height:1.55}
+.bar{margin:6px 0 14px}
+.mantra{padding:14px;margin-top:14px}
+.mantra .deva{font-size:20px}
+.mantra .iast,.mantra .meaning{font-size:13.5px;margin-top:5px}
+.mantra .tools{margin-top:10px}
+.timer{margin-top:12px;padding:8px 12px;gap:10px}
+.timer .t{font-size:22px;min-width:64px}
+.timer .lbl{font-size:12px}
+.why{margin-top:12px}
+.why p{font-size:13.5px}
+.nav-row.bottom{margin-top:auto;padding-top:14px}
+.done{justify-content:center}
+
+/* learn */
+.vedangas{grid-template-columns:repeat(3,1fr);gap:6px}
+.ved{padding:8px 9px;font-size:12.5px;border-radius:10px;line-height:1.3}
+
+/* lab */
+.view.lab{padding-bottom:10px}
+.lab-wrap{display:flex;flex-direction:column;gap:10px;flex:1 1 auto;min-height:0;margin-top:6px}
+.lab-canvas{flex:1 1 auto;min-height:180px;aspect-ratio:auto;padding:6px;display:flex;justify-content:center}
+.lab-canvas svg{height:100%;width:auto;max-width:100%;aspect-ratio:1/1}
+.lab-ctrl{flex:0 0 auto}
+.slider{margin:4px 0}
+.slider label{font-size:13px;margin-bottom:2px}
+.eq{font-size:17px;padding:8px 10px;margin-top:4px}
+.eq small{font-family:var(--sans);font-size:12.5px;color:var(--muted);margin-left:6px}
+.eq.whole{background:#E5F1E7;border-color:#BCD9C3}
+.eq.whole small{color:var(--ok);font-weight:600}
+.triples{margin-top:8px;gap:6px}
+.triples .pill{padding:5px 10px;font-size:12.5px}
+.lab .why{margin-top:8px}
+@media(min-width:760px){
+  .lab-wrap{flex-direction:row;align-items:stretch}
+  .lab-canvas{flex:1.2}
+  .lab-ctrl{flex:1;align-self:center}
+}
+
+/* settings */
+.select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font:inherit;font-size:15px;color:var(--ink)}
+
+@media(min-width:620px){
+  .hero h1{font-size:28px;max-width:440px}
+  .tile b{font-size:17px}
+}
+@media(max-height:700px){
+  .hero .kicker{display:none}
+  .hero{padding:14px 16px}
+  .hero h1{font-size:20px}
+  .sec{margin:10px 0 6px}
+  .tile{padding:10px}
+}
+.view{height:100%}
+.triples{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+.triples::-webkit-scrollbar{display:none}
+.triples .pill{flex:0 0 auto}
+@media(max-height:700px){
+  .page-title{font-size:21px}
+  .lab-canvas{min-height:140px}
+  .lab .kicker{display:none}
+  .slider label{font-size:12px}
+  .lede.sm{font-size:13px}
+  .vedangas .ved{padding:6px 8px;font-size:12px}
+  .pane .meta{padding:7px 10px;margin-bottom:6px}
+}

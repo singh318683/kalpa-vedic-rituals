@@ -69,6 +69,9 @@
     about: { en: "About", hi: "परिचय" },
     aboutBody: { en: "Kalpa: Vedic Rituals is an early prototype. Content is for learning and preparation and will be reviewed by a qualified pandit before release.", hi: "कल्प: वैदिक संस्कार एक प्रारंभिक प्रोटोटाइप है। सामग्री सीखने और तैयारी के लिए है और जारी होने से पहले योग्य पंडित द्वारा समीक्षित की जाएगी।" },
     notFound: { en: "Page not found", hi: "पृष्ठ नहीं मिला" },
+    tabAbout: { en: "About", hi: "परिचय" }, tabSamagri: { en: "Samagri", hi: "सामग्री" }, tabSteps: { en: "Steps", hi: "चरण" },
+    allRites: { en: "All rites", hi: "सभी संस्कार" }, allRitesBody: { en: "3 ready · 13 coming", hi: "3 तैयार · 13 आने वाले" },
+    sandhyaBody: { en: "15-minute morning practice", hi: "15 मिनट की प्रातः उपासना" },
     linkTithi: { en: "Need an auspicious date? Check the tithi in the Tithi app.", hi: "शुभ तिथि चाहिए? ‘तिथि’ ऐप में देखें।" }
   };
   const t = (k) => (S[k] ? S[k][lang] : k);
@@ -90,84 +93,71 @@
   // ---------- views ----------
   function viewHome() {
     const samskaras = D.rites.filter((r) => r.group === "samskara");
-    return `
+    return `<div class="view">
       <section class="hero">${mandala}
         <div class="kicker" style="color:#F1B477">कल्प · Vedāṅga</div>
         <h1>${t("heroTitle")}</h1>
-        <p>${t("heroBody")}</p>
-        <a class="btn light" href="#/rite/sandhya">${t("startDaily")}</a>
+        <a class="btn light sm" href="#/rite/sandhya">${t("startDaily")} →</a>
       </section>
-
-      <section class="section">
-        <h2>${t("saṁskāras")}</h2>
-        <div class="grid three">
-          ${samskaras.map(riteCard).join("")}
-        </div>
-      </section>
-
-      <section class="section">
-        <h2>${t("explore")}</h2>
-        <div class="grid two">
-          <a class="card" href="#/lab"><span class="tag">Śulba Sūtras</span><h3>${t("labCardTitle")}</h3><p>${t("labCardBody")}</p><span class="arrow">${t("open")} →</span></a>
-          <a class="card" href="#/learn"><span class="tag">Vedāṅga</span><h3>${t("learnCardTitle")}</h3><p>${t("learnCardBody")}</p><span class="arrow">${t("open")} →</span></a>
-        </div>
-      </section>
-      <footer class="small">Kalpa: Vedic Rituals · prototype</footer>`;
-  }
-
-  function riteCard(r) {
-    return `<a class="card" href="#/rite/${r.id}">
-      <span class="tag">${t("free")}</span>
-      <h3>${L(r.name)}</h3><p>${L(r.tagline)}</p><span class="arrow">${t("open")} →</span></a>`;
+      <h2 class="sec">${t("saṁskāras")}</h2>
+      <div class="tiles three">
+        ${samskaras.map((r) => `<a class="tile" href="#/rite/${r.id}"><b>${L(r.name)}</b><span>${L(r.tagline)}</span></a>`).join("")}
+      </div>
+      <h2 class="sec">${t("explore")}</h2>
+      <div class="tiles two grow">
+        <a class="tile big" href="#/lab"><i>📐</i><b>${t("labCardTitle")}</b><span>Śulba Sūtras</span></a>
+        <a class="tile big" href="#/learn"><i>📜</i><b>${t("learnCardTitle")}</b><span>Vedāṅga</span></a>
+        <a class="tile big" href="#/rite/sandhya"><i>🌅</i><b>${t("daily")}</b><span>${t("sandhyaBody")}</span></a>
+        <a class="tile big" href="#/samskaras"><i>🪔</i><b>${t("allRites")}</b><span>${t("allRitesBody")}</span></a>
+      </div>
+    </div>`;
   }
 
   function viewSamskaras() {
-    const ready = D.rites.filter((r) => r.group === "samskara");
-    const nitya = D.rites.filter((r) => r.group === "nitya");
-    return `
+    return `<div class="view">
       <div class="kicker">Gṛhya Sūtras</div>
       <h1 class="page-title">${t("saṁskāras")}</h1>
-      <p class="lede">${t("samskaraLede")}</p>
-      <section class="section"><div class="grid three">${ready.map(riteCard).join("")}</div></section>
-      <section class="section"><h2>${t("daily")}</h2><div class="grid three">${nitya.map(riteCard).join("")}</div></section>
-      <section class="section"><h2>${t("comingSoon")}</h2>
-        <div class="grid three">${D.upcoming.map((u) => `<div class="card"><span class="tag soon">${t("comingSoon")}</span><h3>${L(u)}</h3></div>`).join("")}</div>
-      </section>`;
+      <p class="lede sm">${t("samskaraLede")}</p>
+      <div class="tiles two" style="margin-top:14px">
+        ${D.rites.map((r) => `<a class="tile" href="#/rite/${r.id}"><span class="tag">${r.group === "nitya" ? t("daily") : t("free")}</span><b>${L(r.name)}</b><span>${L(r.tagline)}</span></a>`).join("")}
+      </div>
+      <h2 class="sec">${t("comingSoon")}</h2>
+      <div class="chips">${D.upcoming.map((u) => `<span class="chip">${L(u)}</span>`).join("")}</div>
+    </div>`;
   }
 
   function viewRite(id) {
     const r = rite(id);
     if (!r) return viewNotFound();
     const checked = store.get("chk:" + id, []);
-    const count = checked.length;
-    return `
-      <div class="kicker">${r.group === "nitya" ? "Nitya Karma" : "Saṁskāra"}</div>
-      <h1 class="page-title">${L(r.name)}</h1>
-      <p class="lede">${L(r.about)}</p>
-      <div class="meta-row">
-        <div class="meta"><b>${t("when")}</b>${L(r.when)}</div>
-        <div class="meta"><b>${t("duration")}</b>${L(r.duration)}</div>
-        <div class="meta"><b>${t("who")}</b>${L(r.roles)}</div>
+    return `<div class="view">
+      <div class="rite-head">
+        <div class="kicker">${r.group === "nitya" ? "Nitya Karma" : "Saṁskāra"}</div>
+        <h1 class="page-title">${L(r.name)} <small>${L(r.tagline)}</small></h1>
       </div>
-      ${r.group === "samskara" ? `<p class="lede" style="font-size:14px">📅 ${t("linkTithi")}</p>` : ""}
-
-      <section class="section">
-        <h2>${t("samagri")}</h2>
-        <div class="progress-text" id="chkCount">${count} / ${r.samagri.length} ${t("ready")}</div>
-        <div class="card" style="padding:6px 16px">
-          ${r.samagri.map((s, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${checked.includes(i) ? "checked" : ""}><span>${L(s)}</span></label>`).join("")}
+      <div class="seg" role="tablist">
+        <button class="on" data-pane="about">${t("tabAbout")}</button>
+        <button data-pane="samagri">${t("tabSamagri")} <em id="chkCount">${checked.length}/${r.samagri.length}</em></button>
+        <button data-pane="steps">${t("tabSteps")} <em>${r.steps.length}</em></button>
+      </div>
+      <div class="pane-wrap">
+        <div class="pane" data-pane="about">
+          <p class="about">${L(r.about)}</p>
+          <div class="meta"><b>${t("when")}</b>${L(r.when)}</div>
+          <div class="meta"><b>${t("duration")}</b>${L(r.duration)}</div>
+          <div class="meta"><b>${t("who")}</b>${L(r.roles)}</div>
+          ${r.group === "samskara" ? `<p class="hint">📅 ${t("linkTithi")}</p>` : ""}
+          <div class="notice">${t("reviewNote")}</div>
         </div>
-      </section>
-
-      <section class="section">
-        <h2>${t("stepsOverview")}</h2>
-        <ol class="card step-list" style="padding:6px 16px">
-          ${r.steps.map((s, i) => `<li><span class="n">${i + 1}</span><span>${L(s.title)}</span></li>`).join("")}
-        </ol>
-      </section>
-
-      <div class="sticky-cta"><a class="btn block" href="#/rite/${id}/step/1">${t("beginGuided")}</a></div>
-      <div class="notice">${t("reviewNote")}</div>`;
+        <div class="pane" data-pane="samagri" hidden>
+          <div class="checks">${r.samagri.map((s, i) => `<label class="check"><input type="checkbox" data-i="${i}" ${checked.includes(i) ? "checked" : ""}><span>${L(s)}</span></label>`).join("")}</div>
+        </div>
+        <div class="pane" data-pane="steps" hidden>
+          <ol class="step-list">${r.steps.map((s, i) => `<li><span class="n">${i + 1}</span><span>${L(s.title)}</span></li>`).join("")}</ol>
+        </div>
+      </div>
+      <a class="btn block" href="#/rite/${id}/step/1">${t("beginGuided")} →</a>
+    </div>`;
   }
 
   function bindRite(id) {
@@ -178,9 +168,13 @@
         const i = +cb.dataset.i;
         cb.checked ? set.add(i) : set.delete(i);
         store.set("chk:" + id, [...set]);
-        document.getElementById("chkCount").textContent = `${set.size} / ${r.samagri.length} ${t("ready")}`;
+        document.getElementById("chkCount").textContent = `${set.size}/${r.samagri.length}`;
       });
     });
+    app.querySelectorAll(".seg button").forEach((b) => b.addEventListener("click", () => {
+      app.querySelectorAll(".seg button").forEach((x) => x.classList.toggle("on", x === b));
+      app.querySelectorAll(".pane").forEach((p) => (p.hidden = p.dataset.pane !== b.dataset.pane));
+    }));
   }
 
   function viewStep(id, n) {
@@ -188,14 +182,14 @@
     if (!r) return viewNotFound();
     const total = r.steps.length;
     if (n > total) {
-      return `<div class="guided done"><div class="big">🪔</div><h1>${t("doneTitle")}</h1><p class="lede" style="margin:0 auto">${t("doneBody")}</p>
+      return `<div class="view guided done"><div class="big">🪔</div><h1>${t("doneTitle")}</h1><p class="lede" style="margin:0 auto">${t("doneBody")}</p>
         <div class="nav-row"><a class="btn ghost" href="#/rite/${id}">${t("backToRite")}</a><a class="btn" href="#/">${t("home")}</a></div></div>`;
     }
     const s = r.steps[n - 1];
     const pct = Math.round(((n - 1) / total) * 100);
     const canSpeak = "speechSynthesis" in window;
     return `
-      <div class="guided">
+      <div class="view guided">
         <div class="step-head"><span>${L(r.name)} · ${t("step")} ${n} ${t("of")} ${total}</span><a href="#/rite/${id}">✕ ${t("exit")}</a></div>
         <div class="bar"><i style="width:${pct}%"></i></div>
         <h1 class="step-title">${L(s.title)}</h1>
@@ -211,7 +205,7 @@
           <div class="timer"><span class="t" id="tDisp">${fmt(s.timer)}</span><span class="lbl">${t("timerLbl")}</span>
             <button class="pill" id="tStart">${t("startT")}</button><button class="pill" id="tReset">${t("resetT")}</button></div>` : ""}
         <details class="why"><summary>${t("whyStep")}</summary><p>${L(s.why)}</p></details>
-        <div class="nav-row">
+        <div class="nav-row bottom">
           ${n > 1 ? `<a class="btn ghost" href="#/rite/${id}/step/${n - 1}">${t("back")}</a>` : `<a class="btn ghost" href="#/rite/${id}">${t("back")}</a>`}
           <a class="btn" href="#/rite/${id}/step/${n + 1}">${n === total ? t("finish") : t("next")}</a>
         </div>
@@ -268,44 +262,40 @@
   }
 
   function viewLearn() {
-    return `
+    return `<div class="view">
       <div class="kicker">Vedāṅga</div>
       <h1 class="page-title">${t("learnTitle")}</h1>
-      <p class="lede">${t("learnLede")}</p>
-      <section class="section"><h2>${t("sixLimbs")}</h2>
-        <div class="vedangas">${D.vedangas.map((v) => `<div class="ved ${v.highlight ? "hl" : ""}">${L(v)}</div>`).join("")}</div>
-      </section>
-      <section class="section"><h2>${t("fourBranches")}</h2>
-        <div class="grid two">
-          ${D.branches.map((b) => `
-            <${b.link ? `a href="${b.link}"` : "div"} class="card">
-              <span class="tag">${L(b.name)}</span><h3>${L(b.title)}</h3><p>${L(b.body)}</p>
-              <span class="arrow" style="${b.link ? "" : "color:var(--muted)"}">${t("inApp")}: ${L(b.module)}${b.link ? " →" : ""}</span>
-            </${b.link ? "a" : "div"}>`).join("")}
-        </div>
-      </section>`;
+      <p class="lede sm">${t("learnLede")}</p>
+      <h2 class="sec">${t("sixLimbs")}</h2>
+      <div class="vedangas">${D.vedangas.map((v) => `<div class="ved ${v.highlight ? "hl" : ""}">${L(v)}</div>`).join("")}</div>
+      <h2 class="sec">${t("fourBranches")}</h2>
+      <div class="tiles two grow">
+        ${D.branches.map((b) => `
+          <${b.link ? `a href="${b.link}"` : "div"} class="tile">
+            <span class="tag">${L(b.name)}</span><b>${L(b.title)}</b>
+            <span class="${b.link ? "go" : ""}">${L(b.module)}${b.link ? " →" : ""}</span>
+          </${b.link ? "a" : "div"}>`).join("")}
+      </div>
+    </div>`;
   }
 
   // ---------- Geometry Lab ----------
   const triples = [[3, 4], [5, 12], [8, 15], [7, 24], [12, 35]];
   function viewLab() {
-    return `
-      <div class="kicker">Śulba Sūtras</div>
+    return `<div class="view lab">
+      <div class="kicker">Śulba Sūtras · Baudhāyana</div>
       <h1 class="page-title">${t("labTitle")}</h1>
-      <p class="lede">${t("labLede")}</p>
-      <div class="lab-wrap section">
+      <div class="lab-wrap">
         <div class="lab-canvas"><svg id="labSvg" viewBox="0 0 400 400" role="img" aria-label="Right triangle with squares on each side"></svg></div>
-        <div>
+        <div class="lab-ctrl">
           <div class="slider"><label><span>${t("sideA")}</span><span id="aVal">3</span></label><input type="range" id="aIn" min="1" max="15" value="3"></div>
           <div class="slider"><label><span>${t("sideB")}</span><span id="bVal">4</span></label><input type="range" id="bIn" min="1" max="15" value="4"></div>
           <div class="eq" id="eq"></div>
-          <div id="badge"></div>
-          <p style="font-size:14px;margin-top:16px;font-weight:600">${t("triplesLbl")}</p>
           <div class="triples">${triples.map(([a, b]) => `<button class="pill" data-a="${a}" data-b="${b}">${a}–${b}–${Math.round(Math.hypot(a, b))}</button>`).join("")}</div>
+          <details class="why"><summary>${t("ropeTitle")}</summary><p>${t("labLede")}<br><br>${t("ropeBody")}</p></details>
         </div>
       </div>
-      <section class="section card"><h3>🪢 ${t("ropeTitle")}</h3><p style="margin-top:6px">${t("ropeBody")}</p></section>
-      <div class="notice">${t("nextPuzzles")}</div>`;
+    </div>`;
   }
 
   function bindLab() {
@@ -316,8 +306,8 @@
       document.getElementById("bVal").textContent = b;
       const whole = Number.isInteger(c);
       document.getElementById("eq").innerHTML =
-        `a² + b² = c²<br><span>${a * a} + ${b * b} = <b class="${whole ? "ok" : ""}">${c2}</b></span><br><small style="font-family:var(--sans);font-size:13px;color:var(--muted)">c = ${whole ? c : c.toFixed(3)}</small>`;
-      document.getElementById("badge").innerHTML = whole ? `<div class="badge">✓ ${t("wholeTriple")}</div>` : "";
+        `${a * a} + ${b * b} = <b class="${whole ? "ok" : ""}">${c2}</b> <small>c = ${whole ? c : c.toFixed(2)}${whole ? " ✓" : ""}</small>`;
+      document.getElementById("eq").classList.toggle("whole", whole);
 
       // geometry: right angle at origin, a up, b right; SVG y axis points down
       const W = 2 * a + b, H = a + 2 * b, k = 340 / Math.max(W, H);
@@ -361,23 +351,27 @@
   // ---------- settings ----------
   function viewSettings() {
     const trad = store.get("tradition", "general");
-    return `
+    return `<div class="view">
       <h1 class="page-title">${t("settingsTitle")}</h1>
-      <section class="section"><h2>${t("language")}</h2>
-        <label class="opt"><input type="radio" name="lang" value="en" ${lang === "en" ? "checked" : ""}><span>English</span></label>
-        <label class="opt"><input type="radio" name="lang" value="hi" ${lang === "hi" ? "checked" : ""}><span>हिंदी</span></label>
-      </section>
-      <section class="section"><h2>${t("tradition")}</h2>
-        ${traditions.map((x) => `<label class="opt"><input type="radio" name="trad" value="${x.id}" ${trad === x.id ? "checked" : ""}><span>${x[lang]}<small>${L(x.sub)}</small></span></label>`).join("")}
-        <div class="notice">${t("traditionNote")}</div>
-      </section>
-      <section class="section"><button class="btn ghost" id="resetBtn">${t("resetLists")}</button></section>
-      <section class="section"><h2>${t("about")}</h2><p class="lede">${t("aboutBody")}</p></section>`;
+      <h2 class="sec">${t("language")}</h2>
+      <div class="seg">
+        <button class="${lang === "en" ? "on" : ""}" data-lang="en">English</button>
+        <button class="${lang === "hi" ? "on" : ""}" data-lang="hi">हिंदी</button>
+      </div>
+      <h2 class="sec">${t("tradition")}</h2>
+      <select id="tradSel" class="select">
+        ${traditions.map((x) => `<option value="${x.id}" ${trad === x.id ? "selected" : ""}>${x[lang]} — ${L(x.sub)}</option>`).join("")}
+      </select>
+      <p class="hint">${t("traditionNote")}</p>
+      <button class="btn ghost" id="resetBtn" style="margin-top:18px">${t("resetLists")}</button>
+      <h2 class="sec">${t("about")}</h2>
+      <p class="lede sm">${t("aboutBody")}</p>
+    </div>`;
   }
 
   function bindSettings() {
-    app.querySelectorAll('input[name="lang"]').forEach((r) => r.addEventListener("change", () => setLang(r.value)));
-    app.querySelectorAll('input[name="trad"]').forEach((r) => r.addEventListener("change", () => store.set("tradition", r.value)));
+    app.querySelectorAll("[data-lang]").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
+    document.getElementById("tradSel").addEventListener("change", (e) => store.set("tradition", e.target.value));
     document.getElementById("resetBtn").addEventListener("click", (e) => {
       D.rites.forEach((r) => store.set("chk:" + r.id, []));
       e.target.textContent = "✓ " + t("cleared");
@@ -385,7 +379,7 @@
   }
 
   function viewNotFound() {
-    return `<h1 class="page-title">${t("notFound")}</h1><a class="btn" href="#/">${t("home")}</a>`;
+    return `<div class="view"><h1 class="page-title">${t("notFound")}</h1><a class="btn" href="#/">${t("home")}</a></div>`;
   }
 
   // ---------- router ----------
@@ -411,7 +405,7 @@
     bind();
     document.body.classList.toggle("guided-mode", guided);
     document.querySelectorAll(".tabbar a").forEach((a) => a.classList.toggle("active", a.dataset.tab === tab));
-    window.scrollTo(0, 0);
+    app.scrollTop = 0;
   }
 
   function applyStatic() {
